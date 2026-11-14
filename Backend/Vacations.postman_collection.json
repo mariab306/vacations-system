@@ -1,0 +1,513 @@
+{
+  "info": {
+    "_postman_id": "9b9b4ddf-2c91-4fb7-b9fb-3a31cc9b663e",
+    "name": "Vacations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58307643",
+    "_collection_link": "https://go.postman.co/collection/58307643-9b9b4ddf-2c91-4fb7-b9fb-3a31cc9b663e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"first_name\": \"Alice\",\r\n  \"last_name\": \"Lorat\",\r\n  \"email\": \"al@example.com\",\r\n  \"password\": \"Password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/users/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Check if login was successful\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Extract token from response and save it automatically\r\nconst responseData = pm.response.json();\r\nif (responseData.token) {\r\n    pm.environment.set(\"token\", responseData.token);\r\n    console.log(\"Token saved automatically!\");\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"al@example.com\",\r\n  \"password\": \"Password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/users/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Check if login was successful\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Extract token from response and save it automatically into environment\r\nconst responseData = pm.response.json();\r\nif (responseData.token) {\r\n    pm.environment.set(\"token\", responseData.token);\r\n    console.log(\"Token saved automatically!\");\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"jamesp@example.com\",\r\n  \"password\": \"Password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/users/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Vacations",
+      "item": [
+        {
+          "name": "get all with token",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vacations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "vacations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all with token admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Returns array of vacations\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.be.an('array');\r\n    pm.expect(data.length).to.be.at.least(1);\r\n});\r\n\r\npm.test(\"Vacation object has correct properties\", function () {\r\n    const vacation = pm.response.json()[0];\r\n    pm.expect(vacation).to.have.property('vacation_id');\r\n    pm.expect(vacation).to.have.property('destination');\r\n    pm.expect(vacation).to.have.property('likes_count');\r\n    pm.expect(vacation).to.have.property('is_liked');\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/vacations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "vacations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "unauthorized",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_1a68}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"destination\": \"Tokyo, Japan\",\r\n  \"description\": \"Explore Shibuya crossing and Mount Fuji.\",\r\n  \"start_date\": \"2027-04-01\",\r\n  \"end_date\": \"2027-04-10\",\r\n  \"price\": 1600.00,\r\n  \"image_filename\": \"tokyo.jpg\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/vacations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "vacations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add vacation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"destination\": \"Tokyo, Japan\",\r\n  \"description\": \"Explore Shibuya crossing and Mount Fuji.\",\r\n  \"start_date\": \"2027-04-01\",\r\n  \"end_date\": \"2027-04-10\",\r\n  \"price\": 1600.00,\r\n  \"image_filename\": \"tokyo.jpg\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/vacations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "vacations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update vacation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"destination\": \"Tokyo, Japan\",\r\n  \"description\": \"Updated: Explore Shibuya crossing and Mount Fuji. Enjoy local cuisine\",\r\n  \"start_date\": \"2027-04-01\",\r\n  \"end_date\": \"2027-04-10\",\r\n  \"price\": 1600.00,\r\n  \"image_filename\": \"tokyo.jpg\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/vacations/13",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "vacations",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reports",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/vacations/reports",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "api",
+                "vacations",
+                "reports"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "auth": {
+        "type": "noauth"
+      }
+    },
+    {
+      "name": "Likes",
+      "item": [
+        {
+          "name": "like a vacation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Response message confirms like\", function () {\r\n    const data = pm.response.json();\r\n    pm.expect(data.message).to.eql(\"Liked successfully\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/likes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "likes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "unlike a vacation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/likes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "likes",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ai",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"destination\": \"fuji, Japan\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/ai/recommendation",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "ai",
+            "recommendation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "mcp",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"question\": \"What is the average vacation price?\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/mcp/query",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "mcp",
+            "query"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_1a68",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_1ck1",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0n5a",
+      "secret": true
+    }
+  ]
+}
